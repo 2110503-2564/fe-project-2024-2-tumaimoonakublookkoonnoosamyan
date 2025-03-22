@@ -19,6 +19,7 @@ export default async function TopMenu() {
         </Link>
       }
       <TopMenuItem title="Booking" pageRef='/booking'/>
+      <Link href='/'></Link>
       <Image src="/img/logo.png" alt="logo" className={styles.logoimg} width={0} height={0} sizes='100vh'/>
       {
         session?

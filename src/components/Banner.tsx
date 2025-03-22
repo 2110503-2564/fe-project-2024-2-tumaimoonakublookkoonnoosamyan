@@ -32,7 +32,7 @@ export default function Banner() {
                 font-semibold px-2 py-2 m-2 rounded z-30 absolute bottom-0 right-0
                 hover:bg-cyan-600 hover:text-white hover:border-transparent"
                 onClick={(e)=>{e.stopPropagation(); router.push('/massage')}}>
-                Get Your Massaage NOW!!
+                Get Your Massage NOW!!
         </button>
     </div>
   );

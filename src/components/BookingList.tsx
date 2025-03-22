@@ -19,7 +19,7 @@ export default function BookingList(){
                     key={bookItem.nameLastname}>
                         <div className="text-xl">Name: {bookItem.nameLastname}</div>
                         <div className="text-sm">Tel: {bookItem.tel}</div>
-                        <div className="text-sm">Location: {bookItem.venue}</div>
+                        <div className="text-sm">Location: {bookItem.shop}</div>
                         <div className="text-md">Date: {bookItem.bookDate}</div>
                         <button className="block rounded-md bg-sky-600 hover:bg-indigo-600 px-3 py-2 text-white shadow-sm"
                                 onClick={()=>dispatch(removeBooking(bookItem))}>
