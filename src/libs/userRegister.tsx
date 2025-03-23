@@ -1,4 +1,8 @@
-export default async function userRegister(userName:string,userEmail:string,userPassword:string,userTel:string) {
+export default async function userRegister(
+    userName:string,
+    userEmail:string,
+    userPassword:string,
+    userTel:string) {
     const response = await fetch("http://localhost:5003/api/v1/auth/register" , {
         method:"POST",
         headers:{
@@ -6,10 +10,10 @@ export default async function userRegister(userName:string,userEmail:string,user
         },
         body:JSON.stringify({
             name:userName,
-            email: userEmail,
-            password: userPassword,
+            email:userEmail,
+            password:userPassword,
             telephone:userTel,
-            role:'user'
+            role:'user' 
         })
     })
 
@@ -17,6 +21,6 @@ export default async function userRegister(userName:string,userEmail:string,user
         throw new Error("Failed to register")
     }
 
-    return await response.json()
+    return response.json()
 
 }

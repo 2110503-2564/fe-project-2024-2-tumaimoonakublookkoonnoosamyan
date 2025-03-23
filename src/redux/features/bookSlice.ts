@@ -12,7 +12,7 @@ export const bookSlice = createSlice({
     reducers:{
         addBooking:(state,action:PayloadAction<BookingItem>)=>{
             const remainItems = state.bookItems.filter(obj => {
-                return ((obj.venue !== action.payload.venue)||
+                return ((obj.shop !== action.payload.shop)||
                 (obj.bookDate!==action.payload.bookDate))
             })
             state.bookItems = remainItems
@@ -20,7 +20,7 @@ export const bookSlice = createSlice({
         },
         removeBooking:(state,action:PayloadAction<BookingItem>)=>{
             const remainItems = state.bookItems.filter(obj => {
-                return ((obj.venue !== action.payload.venue)||
+                return ((obj.shop !== action.payload.shop)||
                 (obj.nameLastname !== action.payload.nameLastname)||
                 (obj.tel !== action.payload.tel)||
                 (obj.bookDate!==action.payload.bookDate))

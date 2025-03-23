@@ -1,8 +1,12 @@
 'use client'
+import userRegister from '@/libs/userRegister';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm: React.FC = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
+    name:'',
     email: '',
     tel:'',
     password: '',
@@ -17,12 +21,25 @@ const RegisterForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Register data:', formData);
-    // Handle registration logic here
-  };
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do NOT match");
+      return; // Stop further execution
+    }
 
+    try {
+      await userRegister(formData.name, formData.email, formData.password, formData.tel);
+      // Redirect user to login page after successful registration
+      router.push('/api/auth/signin'); 
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Handle registration error, e.g., display error message to user
+    }
+  };
+  
+  // window.location.href = '/api/auth/signin';
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <form
@@ -32,6 +49,23 @@ const RegisterForm: React.FC = () => {
         <h2 className="text-white text-2xl font-semibold mb-6 text-center">
           Create an Account
         </h2>
+
+        {/* UserName */}
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-400 mb-2">
+            Name
+          </label>
+          <input
+            type="name"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your name"
+          />
+        </div>
 
         {/* Email */}
         <div className="mb-4">
@@ -47,6 +81,23 @@ const RegisterForm: React.FC = () => {
             required
             className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email"
+          />
+        </div>
+
+        {/* Tel */}
+        <div className="mb-4">
+          <label htmlFor="tel" className="block text-gray-400 mb-2">
+            Tel.
+          </label>
+          <input
+            type="tel"
+            id="tel"
+            name="tel"
+            value={formData.tel}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your Tel."
           />
         </div>
 

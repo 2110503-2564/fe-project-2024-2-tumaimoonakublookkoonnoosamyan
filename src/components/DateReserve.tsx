@@ -9,14 +9,16 @@ import { addBooking } from "@/redux/features/bookSlice";
 import { useDispatch } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useSession } from "next-auth/react";
 
 
 export default function LocationDateReserve({massageJson}:{massageJson:MassageJson}){
-        const [nameLastname,setNameLastname] = useState<string|null>(null)
-        const [tel,setTel] = useState<string>("")
+        const {data:session} = useSession()
+        const [nameLastname,setNameLastname] = useState<string>(session?.user.name!=undefined?session?.user.name!:"")
+        const [tel,setTel] = useState<string>(session?.user.tel!=undefined?session?.user.tel!:"")
         const [reserveDate,setReserveDate] = useState<Dayjs | null>(null);
         const [location,setLocation] = useState('baansaifon');
-      
+
         const dispatch = useDispatch<AppDispatch>()
       
         const makeReservation = ()=>{
