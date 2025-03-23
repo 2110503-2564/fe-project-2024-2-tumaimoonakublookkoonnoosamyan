@@ -1,6 +1,6 @@
 import getMassage from "@/libs/getMassage"
 import Image from "next/image"
-
+import Link from "next/link"
 export default async function MassageDetailPage({params}:{params:{mid:string}}) {
     const massage = await getMassage(params.mid)
 
@@ -16,6 +16,16 @@ export default async function MassageDetailPage({params}:{params:{mid:string}}) 
                 <div className="text-md mx-5">Address: { massage.data.address}</div>
                 <div className="text-md mx-5">Tel. : { massage.data.telephone}</div>
                 <div className="text-md mx-5">Open-time : { massage.data.openTime} - {massage.data.closeTime}</div>
+              
+                    <Link href={`/booking?id=${params.mid}&name=${massage.data.name}`}>
+                   <button className='bg-red-600 text-white bordor bordor-cyan-600
+                    font-semibold py-2 px-2 m-2 rounded z-30 absolute 
+                 hover:bg-yellow-300 hover:text-red-600 hover:border-transparent'
+                > Make Booking
+     
+                    </button>
+                   </Link>
+                
                 </div>
             </div>
         </main>
