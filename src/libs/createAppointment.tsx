@@ -9,15 +9,13 @@ export default async function createAppointment(token:string,shopID:string,date:
             authorization:`Bearer ${token}`,
         },
         body:JSON.stringify({
-            date:date,
             time:time,
+            date:date,
         })
     })
 
     if(!response.ok){
+        console.log(response)
         throw new Error("Failed to create Appointment")
     }
-
-    return response.json()
-
 }
