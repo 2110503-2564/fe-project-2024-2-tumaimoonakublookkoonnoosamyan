@@ -9,8 +9,12 @@ import getUserProfile from "@/libs/getUserProfile";
 export default async function TopMenu() {
 
   const session = await getServerSession(authOptions)
-  const user = await getUserProfile(session?.user.token!=undefined?session?.user.token:'')
-
+  
+  let user = null
+  if(session)
+{
+  user = await getUserProfile(session?.user.token!=undefined?session?.user.token:'')
+}
   return (
     <div className={styles.menucontainer}>
       
@@ -23,7 +27,8 @@ export default async function TopMenu() {
         session?
         <Link href='/api/auth/signout' >
           <div className="flex items-center absolute left-0 h-full px-2 text-cyan-600 text-sm">
-            Sign-Out of {user.data.name}</div>
+            Sign-Out of {user.data.name}
+            </div>
           </Link>:
           <Link href='/api/auth/signin' >
           <div className="flex items-center absolute left-0 h-full px-2 text-cyan-600 text-sm">

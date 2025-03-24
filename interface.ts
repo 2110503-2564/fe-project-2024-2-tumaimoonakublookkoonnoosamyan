@@ -16,6 +16,7 @@ interface MassageItem {
   }
 
   interface BookingItem {
+    token:string;
     nameLastname: string;
     tel: string;
     shop: string;

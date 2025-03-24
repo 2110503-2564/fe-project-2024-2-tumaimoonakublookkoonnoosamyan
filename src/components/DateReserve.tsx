@@ -3,34 +3,34 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {Select,MenuItem, TextField} from "@mui/material";
 import {useState} from "react";
 import dayjs , { Dayjs } from 'dayjs';
-import { UseDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { addBooking } from "@/redux/features/bookSlice";
+import { addBooking  } from "@/redux/features/bookSlice";
 import { useDispatch } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useSession } from "next-auth/react";
 
-
-export default function LocationDateReserve({massageJson}:{massageJson:MassageJson}){
+export default function LocationDateReserve({massageJson}:
+  {massageJson:MassageJson}){
         const {data:session} = useSession()
         const [nameLastname,setNameLastname] = useState<string>(session?.user.name!=undefined?session?.user.name!:"")
         const [tel,setTel] = useState<string>(session?.user.tel!=undefined?session?.user.tel!:"")
         const [reserveDate,setReserveDate] = useState<Dayjs | null>(null);
         const [location,setLocation] = useState('baansaifon');
-
         const dispatch = useDispatch<AppDispatch>()
-      
+        
         const makeReservation = ()=>{
       
           if(nameLastname&&tel&&reserveDate&&location){
               const item:BookingItem = {
+                  token:session?.user.token.toString()!=undefined?session.user.token.toString():'',
                   nameLastname:nameLastname,
                   tel:tel,
                   shop:location,
                   bookDate:dayjs(reserveDate).format("YYYY/MM/DD"),
               }
               dispatch(addBooking(item))
+              // createAppointment(item.token,item.bookDate)
           }
       }
       
