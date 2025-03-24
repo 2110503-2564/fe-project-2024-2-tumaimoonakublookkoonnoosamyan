@@ -23,11 +23,6 @@ export default function Banner() {
             <h1 className="text-4xl font-medium">NUAD MAI PEE</h1>
             <h3 className="text-xl font-serif"></h3>
         </div>
-        {
-          session?
-          <div className="z-30 absolute top-5 right-10 font-semibold text-white text-xl">
-            Welcome</div>:null
-        }
         <button className="bg-white text-cyan-600 border border-cyan-600 
                 font-semibold px-2 py-2 m-2 rounded z-30 absolute bottom-0 right-0
                 hover:bg-cyan-600 hover:text-white hover:border-transparent"
