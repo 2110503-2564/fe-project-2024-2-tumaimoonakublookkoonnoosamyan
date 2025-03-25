@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { useSession } from "next-auth/react";
 import createAppointment from "@/libs/createAppointment";
+import getUserProfile from "@/libs/getUserProfile";
 
 export default function LocationDateReserve({ massageJson }: { massageJson: MassageJson }) {
     const { data: session } = useSession();
@@ -21,7 +22,7 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
     const shopFromURL = searchParams.get("shop") || "";
     const bookingList = useSelector((state: RootState) => state.bookSlice.bookItems);
 
-    const [nameLastname, setNameLastname] = useState<string>(session?.user?.name ?? "");
+    const [nameLastname,setNameLastname] = useState<string>(session?.user?.name ?? "");
     const [tel, setTel] = useState<string>(session?.user?.tel ?? "");
     const [reserveDate, setReserveDate] = useState<Dayjs | null>(null);
     const [reserveTime, setReserveTime] = useState<Dayjs | null>(null);
@@ -29,12 +30,29 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
 
+    let userData;
+
     useEffect(() => {
         if (shopFromURL) {
             setLocation(shopFromURL);
         }
-    }, [shopFromURL]);
-    
+        const fetchUserProfile = async () => {
+            try {
+              if (session?.user?.token) {
+                userData = await getUserProfile(session.user.token);
+                console.log(userData)
+                setNameLastname(userData.data.name)
+                // Update state variables with user data
+                setTel(userData.tel); 
+                // Update other state variables as needed 
+              }
+            } catch (error) {
+              console.error("Error fetching user profile:", error);
+              // Handle the error appropriately, maybe show a user-friendly error message
+            }
+          };
+          fetchUserProfile();
+    }, [shopFromURL, session?.user?.token]);
     
     const makeReservation = () => {
         if (nameLastname && tel && reserveDate && reserveTime && location) {
@@ -106,14 +124,6 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
 
                 <form className="space-y-5">
                     <div className="flex flex-col space-y-4">
-                        <TextField
-                            variant="outlined"
-                            fullWidth
-                            label="Name-Lastname"
-                            value={nameLastname}
-                            onChange={(e) => setNameLastname(e.target.value)}
-                            className="bg-white rounded-md"
-                        />
                         <TextField
                             variant="outlined"
                             fullWidth
