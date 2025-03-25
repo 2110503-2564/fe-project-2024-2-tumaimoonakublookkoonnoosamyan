@@ -1,4 +1,4 @@
-export default async function getUserAppointments(token:string){
+export default async function getAppointments(token:string){
     const response = await fetch(`https://localhost:5003/api/v1/appointments`, {
         method:"GET",
         headers:{

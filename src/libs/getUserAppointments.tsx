@@ -1,10 +1,14 @@
-export default async function getUserAppointments(token:string,id:string){
-    const response = await fetch(`https://localhost:5003/api/v1/appointments/${id}`, {
-        method:"GET",
-        headers:{
-            authorization:`Bearer ${token}`,
-        }
-    })
+import getAppointments from "./getAppointments"
+
+interface AppointmentItem {
+    user: string;
+}
+
+export default async function getUserAppointments(token:string,userID:string){
+
+    const appointments = await getAppointments(token)
+
+    const response = appointments.data.find((item: AppointmentItem)=> item.user===userID)
 
     if(!response.ok){
         throw new Error("Cannot get user profile")

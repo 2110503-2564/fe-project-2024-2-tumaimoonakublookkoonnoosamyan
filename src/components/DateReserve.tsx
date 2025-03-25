@@ -27,13 +27,15 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
     const [reserveTime, setReserveTime] = useState<Dayjs | null>(null);
     const [location, setLocation] = useState(shopFromURL || "baansaifon");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (shopFromURL) {
             setLocation(shopFromURL);
         }
     }, [shopFromURL]);
-
+    
+    
     const makeReservation = () => {
         if (nameLastname && tel && reserveDate && reserveTime && location) {
             const reserveDateTime = dayjs(reserveDate)
@@ -41,6 +43,7 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
                 .minute(reserveTime.minute());
 
             const newBooking: BookingItem = {
+                appointmentId:'',
                 token:session?.user?.token??'',
                 nameLastname:nameLastname,
                 tel:tel,
@@ -56,11 +59,23 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
             if (isDuplicate) {
                 setErrorMessage("เวลานี้ถูกจองไปแล้ว กรุณาเลือกเวลาอื่น!");
             } else {
-                dispatch(addBooking(newBooking));
                 const shop = massageJson.data.find((item) => item.name === newBooking.shop)
                 if (shop) {
-                    createAppointment(newBooking.token, shop._id, reserveDate.format('YYYY/MM/DD'), reserveTime.format('HH:mm'))
-                    router.push("/mybooking");
+                    setIsLoading(true);
+                    createAppointment(newBooking.token, shop._id, reserveDate.format('YYYY/MM/DD'), reserveTime.format('HH:mm')).then((createdAppointment) => {
+                        // อัพเดท appointmentId ใน newBooking
+                        console.log(createdAppointment)
+                        newBooking.appointmentId = createdAppointment.data._id; 
+                        dispatch(addBooking(newBooking)); 
+                        router.push("/mybooking"); 
+                      })
+                      .catch((error) => {
+                        console.error("Error creating appointment:", error);
+                        // Handle the error appropriately, maybe show a user-friendly error message
+                      })
+                      .finally(() => {
+                        setIsLoading(false); // ปิด loading
+                      });
                 }
             }
         }
@@ -69,6 +84,11 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
     return (
         <main className="flex justify-center items-center min-h-screen bg-gray-50">
             <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
+                {isLoading && (
+                    <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center">
+                        <p className="text-lg font-semibold">กำลังบันทึกข้อมูล...</p>
+                    </div>
+                )}
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Massage Shop Booking</h2>
 
                 {/* แจ้งเตือนเมื่อมีการจองซ้ำ */}

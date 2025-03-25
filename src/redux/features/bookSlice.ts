@@ -1,7 +1,4 @@
-import createAppointment from "@/libs/createAppointment"
-import getUserProfile from "@/libs/getUserProfile"
 import { createSlice , PayloadAction } from "@reduxjs/toolkit"
-import { useSession } from "next-auth/react"
 
 type BookState = {
     bookItems:BookingItem[]

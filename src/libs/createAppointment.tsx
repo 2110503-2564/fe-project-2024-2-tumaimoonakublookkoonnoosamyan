@@ -1,5 +1,3 @@
-import getUserProfile from "./getUserProfile"
-
 export default async function createAppointment(token:string,shopID:string,date:string,time:string) {
 
     const response = await fetch(`http://localhost:5003/api/v1/massageShops/${shopID}/appointments` , {
@@ -15,7 +13,9 @@ export default async function createAppointment(token:string,shopID:string,date:
     })
 
     if(!response.ok){
-        console.log(response)
         throw new Error("Failed to create Appointment")
     }
+
+    return await response.json()
+
 }

@@ -3,11 +3,30 @@ import { AppDispatch, useAppSelector } from "@/redux/store";
 import { removeBooking } from "@/redux/features/bookSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import deleteAppointment from "@/libs/deleteAppointment";
+import { useSession } from "next-auth/react";
 
 export default function BookingList() {
+    const session = useSession()
     const bookItems = useAppSelector((state: any) => state.bookSlice.bookItems);
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
+
+
+    const handleDelete = async (appointmentId: string,bookItem:BookingItem) => {
+      try {
+        if (session.data?.user?.token) { // Assuming your token is stored in session
+          await deleteAppointment(session.data.user.token, appointmentId);
+          dispatch(removeBooking(bookItem)); // Assuming your removeBooking action takes an ID
+        } else {
+          console.error("User token not found.");
+          // Handle the case where the user token is not available
+        }
+      } catch (error) {
+        console.error("Error deleting appointment:", error);
+        // Handle the error appropriately, maybe show a user-friendly error message
+      }
+    };
 
     return (
         <>
@@ -34,7 +53,8 @@ export default function BookingList() {
           {/* ปุ่ม Remove */}
           <button
             className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300"
-            onClick={() => dispatch(removeBooking(bookItem))}
+            onClick={() => {handleDelete(bookItem.appointmentId,bookItem)}
+              }
           >
             Remove
           </button>
