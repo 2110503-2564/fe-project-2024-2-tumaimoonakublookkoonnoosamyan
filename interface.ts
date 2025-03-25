@@ -16,6 +16,7 @@ interface MassageItem {
   }
 
   interface BookingItem {
+    appointmentId: string; 
     token:string;
     nameLastname: string;
     tel: string;
