@@ -7,8 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { LocalizationProvider, DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import updateAppointment from "@/libs/updateAppointment";
+import { useSession } from "next-auth/react";
 
 export default function UpdateBooking() {
+    const session = useSession()
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -20,12 +23,11 @@ export default function UpdateBooking() {
 
     const [updatedData, setUpdatedData] = useState<BookingItem | null>(existingItem || null);
     const [reserveDate, setReserveDate] = useState<Dayjs | null>(
-        existingItem ? dayjs(existingItem.bookDate, "YYYY/MM/DD HH:mm") : null
+        existingItem ? dayjs(existingItem.bookDate, "YYYY/MM/DD") : null
     );
     const [reserveTime, setReserveTime] = useState<Dayjs | null>(
-        existingItem ? dayjs(existingItem.bookDate, "YYYY/MM/DD HH:mm") : null
+        existingItem ? dayjs(existingItem.bookDate, "HH:mm") : null
     );
-
     const handleSaveUpdate = () => {
         if (updatedData && reserveDate && reserveTime) {
             const updatedDateTime = dayjs(reserveDate)
@@ -33,6 +35,8 @@ export default function UpdateBooking() {
                 .minute(reserveTime.minute());
 
             dispatch(updateBooking({ ...updatedData, bookDate: updatedDateTime.format("YYYY/MM/DD HH:mm") }));
+            
+            updateAppointment(session.data?.user.token??'',updatedData.appointmentId,reserveDate.format('YYYY/MM/DD'),reserveTime.format('HH:mm'))
             router.push("/mybooking");
         }
     };
