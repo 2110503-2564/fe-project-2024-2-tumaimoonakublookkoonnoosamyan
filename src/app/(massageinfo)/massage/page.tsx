@@ -8,10 +8,9 @@ export default function Home() {
   const massage = getMassages()
   return (
     <main>
-
-            <Suspense fallback={<p>loading ... <LinearProgress/></p>}>
-            <MassageCatalog massageJson={massage}/>
-            </Suspense>
+        <Suspense fallback={<p>loading ... <LinearProgress/></p>}>
+        <MassageCatalog massageJson={massage}/>
+        </Suspense>
   </main>
   );
 }

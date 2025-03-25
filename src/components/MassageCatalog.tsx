@@ -17,7 +17,7 @@ export default async function MassageCatalog({massageJson}:{massageJson:Promise<
               alignContent:"space-around"}}>
                 {
                   massageJsonReady.data.map((MassageItem:MassageItem) => 
-                    <Link href={`/massage/${MassageItem._id.toString()}`} className="w-1/5">
+                    <Link href={`/massage/${MassageItem._id.toString()}` } key={MassageItem._id} className="w-1/5">
                       <Card massageName={MassageItem.name} imgSrc={MassageItem.picture} 
                       />
                     </Link>

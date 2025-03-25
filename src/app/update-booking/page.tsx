@@ -25,6 +25,7 @@ export default function UpdateBooking() {
     const [reserveDate, setReserveDate] = useState<Dayjs | null>(
         existingItem ? dayjs(existingItem.bookDate, "YYYY/MM/DD") : null
     );
+
     const [reserveTime, setReserveTime] = useState<Dayjs | null>(
         existingItem ? dayjs(existingItem.bookDate, "HH:mm") : null
     );
