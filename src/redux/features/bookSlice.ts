@@ -1,4 +1,7 @@
+import createAppointment from "@/libs/createAppointment"
+import getUserProfile from "@/libs/getUserProfile"
 import { createSlice , PayloadAction } from "@reduxjs/toolkit"
+import { useSession } from "next-auth/react"
 
 type BookState = {
     bookItems:BookingItem[]
@@ -26,9 +29,20 @@ export const bookSlice = createSlice({
                 (obj.bookDate!==action.payload.bookDate))
             })
             state.bookItems = remainItems
-        }
+        },
+        updateBooking: (state, action: PayloadAction<BookingItem>) => {
+            const index = state.bookItems.findIndex(
+                obj =>
+                    obj.shop === action.payload.shop &&
+                    obj.nameLastname === action.payload.nameLastname
+            );
+            if (index !== -1) {
+                state.bookItems[index] = action.payload;
+            }
+        },
+
     }
 })
 
-export const {addBooking,removeBooking} = bookSlice.actions
+export const {addBooking,removeBooking,updateBooking} = bookSlice.actions
 export default bookSlice.reducer
