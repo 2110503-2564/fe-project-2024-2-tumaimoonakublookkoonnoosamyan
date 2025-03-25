@@ -53,7 +53,6 @@ export default function LocationDateReserve({ massageJson }: { massageJson: Mass
           };
           fetchUserProfile();
     }, [shopFromURL, session?.user?.token]);
-    
     const makeReservation = () => {
         if (nameLastname && tel && reserveDate && reserveTime && location) {
             const reserveDateTime = dayjs(reserveDate)
